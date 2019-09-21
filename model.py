@@ -6,14 +6,16 @@ import torch.nn as nn
 from config import Config
 import numpy as np
 
+'''
+design loss function
+'''
 class My_MSE_loss(nn.Module):
     def __init__(self):
         super().__init__()
         
     def forward(self, x, y):
         if x.sum() > y.sum():
-            # return torch.mean(torch.pow((x - y), 6))**0.5 * 20
-            return torch.mean(torch.pow((x - y), 2))**0.5 * 10 + 5
+            return torch.mean(torch.pow((x - y), 2))**0.5 * 10
         else:
             return torch.mean(torch.pow((x - y), 2))**0.5
             
@@ -158,6 +160,9 @@ class Network(nn.Module):
 
     def forward(self, x):
 
+        '''
+        embedding layers
+        '''
         output_encoder_plat_form = self.encoder_plat_form(x[:,1].long())
         output_encoder_biz_type = self.encoder_biz_type(x[:,2].long())
         output_encoder_product_id = self.encoder_product_id(x[:,3].long())
@@ -179,7 +184,10 @@ class Network(nn.Module):
         output_encoder_rvcr_city_name
         ), 1)
 
-        # FC layer
+        '''
+        Fully Connected layers
+        you can attempt muti-task through uncommenting the following code and modifying related code in train()
+        '''
         output_FC_1_1 = self.FC_1_1(concat_encoder_output)
         # output_FC_2_1 = self.FC_2_1(concat_encoder_output)
         # output_FC_3_1 = self.FC_3_1(concat_encoder_output)

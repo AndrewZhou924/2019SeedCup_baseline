@@ -1,7 +1,7 @@
 import datetime
 
 '''
-一次计算全部指标，附加的accuracy精确到天，即计算日期相同的比例
+calculate rankScore, onTimePercent and accuracy
 '''
 def calculateAllMetrics(real_signed_time_array, pred_signed_time_array):
     if len(real_signed_time_array) != len(pred_signed_time_array):
@@ -14,7 +14,9 @@ def calculateAllMetrics(real_signed_time_array, pred_signed_time_array):
     total_count = len(real_signed_time_array)    
     for i in range(total_count):
         real_signed_time = datetime.datetime.strptime(real_signed_time_array[i], "%Y-%m-%d %H:%M:%S")
-        pred_signed_time = datetime.datetime.strptime(pred_signed_time_array[i], "%Y-%m-%d %H:%M:%S")
+        real_signed_time = real_signed_time.replace(minute = 0)
+        real_signed_time = real_signed_time.replace(second = 0)
+        pred_signed_time = datetime.datetime.strptime(pred_signed_time_array[i], "%Y-%m-%d %H")
         time_interval = int((real_signed_time - pred_signed_time).total_seconds() / 3600)
 
         # rankScore
@@ -35,9 +37,5 @@ def calculateAllMetrics(real_signed_time_array, pred_signed_time_array):
     onTimePercent = float(onTime_count/total_count)
     rankScore = float((score_accumulate/total_count)**0.5)
 
-    # print("==> [in evaluation] rankScore is {}, onTimePercent is {}, accuracy is {}".format(rankScore,onTimePercent,accuracy))
     return (rankScore,onTimePercent,accuracy)
-
-def test():
-    pass
 

@@ -2,12 +2,15 @@ import torch
 import time
 import os
 
+'''
+config for train and test period
+'''
 class Config(object):
     def __init__(self):
         self.USE_CUDA           =       torch.cuda.is_available()
         self.NUM_EPOCHS         =       1000
 
-        self.TRAIN_BATCH_SIZE   =       256
+        self.TRAIN_BATCH_SIZE   =       128
         self.VAL_BATCH_SIZE     =       128
         self.TEST_BATCH_SIZE    =       128
         self.TRAIN_FILE         =       './data/SeedCup_pre_train.csv'
@@ -19,17 +22,17 @@ class Config(object):
         self.MODEL_FILE_NAME    =       'model.pkl'
         self.MODEL_SAVE_FOLDER  =       './model/'
         self.MODEL_SAVE_PATH    =       self.MODEL_SAVE_FOLDER + self.MODEL_FILE_NAME
-        self.LR                 =       1e-4  # default learning rate
+        self.LR                 =       1e-3  # default learning rate
 
         self.EMBEDDING_DIM      =       100
         self.LINER_HID_SIZE     =       1024
         self.INPUT_SIZE         =       11
         
-        self.OUTPUT_DIM         =       1
-        self.OUTPUT_TIME_INTERVAL_2 =   1
-        self.OUTPUT_TIME_INTERVAL_3 =   1
-        self.OUTPUT_TIME_INTERVAL_4 =   1
-        self.LOSS_1_WEIGHT = 1
+        self.OUTPUT_DIM              =   1
+        self.OUTPUT_TIME_INTERVAL_2  =   1
+        self.OUTPUT_TIME_INTERVAL_3  =   1
+        self.OUTPUT_TIME_INTERVAL_4  =   1
+        self.LOSS_1_WEIGHT           =   1
 
         self.uid_range            =   1505257
         self.plat_form_range      =   4
@@ -47,12 +50,12 @@ class Config(object):
         self.Dataset_Normorlize   =   False
         self.Train_Val_ratio      =   0.9
         self.Train_rankScore_threshold = 70
-        self.Train_onTimePercent_threshold = 0.92
+        self.Train_onTimePercent_threshold = 0.90
 
         self.mkdir()
 
     '''
-    设置学习率策略，可自由调整
+    you can set your own learning rate strategy here
     '''
     def get_lr(self, epoch):
 
@@ -64,7 +67,7 @@ class Config(object):
         return self.LR
 
     '''
-    创建文件夹
+    make diretory
     '''
     def mkdir(self):
         if not os.path.exists(self.TEST_OUTPUT_FOLDER):

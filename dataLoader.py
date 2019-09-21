@@ -6,7 +6,7 @@ from config import Config
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-"""
+'''
 Dataset information
 0 uid
 1 plat_form
@@ -33,7 +33,7 @@ Dataset information
 19 *got_time
 20 *dlved_time
 21 *signed_time
-"""
+'''
 class TrainSet(Dataset):
     def __init__(self, source_file, opt=None):
 
@@ -178,9 +178,7 @@ class ValSet(Dataset):
                 self.signed_time.append(data[21])
 
             print("==> in ValSet, len(inputs)   is ", len(self.inputs))
-            print("==> in ValSet, inputs.sahpe   is ", np.shape(self.inputs))
-            print("==> in ValSet, len(payed_time)  is ", len(self.payed_time))
-            print("==> in ValSet, len(signed_time)  is ", len(self.signed_time))
+            print("==> in ValSet, inputs.shape   is ", np.shape(self.inputs))
 
 
     def __getitem__(self, idx):
@@ -193,7 +191,7 @@ class ValSet(Dataset):
         return len(self.inputs)
 
 '''
-测试集上的可用字段
+available data fields in Testset
 0 uid	
 1 plat_form	
 2 biz_type	
@@ -246,8 +244,7 @@ class TestSet(Dataset):
                 self.payed_time.append(data[4])
 
             print("==> in TestSet, len(inputs)   is ", len(self.inputs))
-            print("==> in TestSet, inputs.sahpe   is ", np.shape(self.inputs))
-            print("==> in TestSet, len(payed_time)  is ", len(self.payed_time))
+            print("==> in TestSet, inputs.shape   is ", np.shape(self.inputs))
 
 
     def __getitem__(self, idx):
@@ -257,9 +254,3 @@ class TestSet(Dataset):
 
     def __len__(self):
         return len(self.inputs)
-
-def test():
-    TEST_TRAINSET = TrainSet('./data/SeedCup_pre_train.csv')
-    TEST_VALSET   = TestSet('./data/SeedCup_pre_train.csv')
-
-# test()

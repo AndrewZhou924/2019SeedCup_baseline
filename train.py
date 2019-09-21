@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 opt = Config()
 
-# prepare data
+# prepare dataset
 print("==> loading data...")
 trainset = TrainSet(opt.TRAIN_FILE, opt=opt)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=opt.TRAIN_BATCH_SIZE, shuffle=True)
@@ -27,7 +27,7 @@ print("==> load data successfully")
 # setup network
 net = Network(opt)
 if opt.USE_CUDA:
-    print("==> USING CUDA")
+    print("==> using CUDA")
     net = torch.nn.DataParallel(
         net, device_ids=range(torch.cuda.device_count())).cuda()
     cudnn.benchmark = True
@@ -112,36 +112,32 @@ def val(epoch):
             inputs = inputs.cuda()
 
         inputs = torch.autograd.Variable(inputs)
-
         (output_FC_1_1, output_FC_1_2) = net(inputs.float())
-        # outputs = net(inputs.float()) # outputs.size: 800 * val_batchsize
         
         # calculate pred_signed_time via output
         for i in range(len(inputs)):
 
-            temp_payed_time = payed_time[i]
-            temp_payed_time = datetime.datetime.strptime(temp_payed_time, "%Y-%m-%d %H:%M:%S")
-
             pred_time_day = output_FC_1_1[i]
             pred_time_hour = output_FC_1_2[i]
 
-            temp_pred_signed_time = temp_payed_time + relativedelta(days = int(pred_time_day))
-            temp_pred_signed_time.replace(hour = int(pred_time_hour)%24)
+            temp_payed_time = payed_time[i]
+            temp_payed_time = datetime.datetime.strptime(temp_payed_time, "%Y-%m-%d %H:%M:%S")
+            temp_payed_time = temp_payed_time.replace(hour = int(pred_time_hour)%24)
 
-            pred_signed_time.append(temp_pred_signed_time.strftime("%Y-%m-%d %H:%M:%S"))
+            temp_pred_signed_time = temp_payed_time + relativedelta(days = int(pred_time_day))
+            temp_pred_signed_time = temp_pred_signed_time.replace(hour = int(pred_time_hour)%24)
+            temp_pred_signed_time = temp_pred_signed_time.replace(minute = 0)
+            temp_pred_signed_time = temp_pred_signed_time.replace(second = 0)
+            # temp_pred_signed_time.
+
+            pred_signed_time.append(temp_pred_signed_time.strftime("%Y-%m-%d %H"))
             real_signed_time.append(signed_time[i])
 
     (rankScore_result, onTimePercent_result, accuracy_result) = calculateAllMetrics(real_signed_time, pred_signed_time)
     print("==> epoch {}: rankScore is {}, onTimePercent is {}, accuracy is {}".format(epoch, rankScore_result, onTimePercent_result, accuracy_result))
 
     # save model
-    # if (onTimePercent_result > highest_metrics and rankScore_result < opt.Train_rankScore_threshold):
-    #     print("==> saving model")
-    #     print("==> onTimePercent {} | rankScore {} ".format(onTimePercent_result, rankScore_result))
-    #     highest_metrics = onTimePercent_result
-    #     torch.save(net, opt.MODEL_SAVE_PATH)
-
-    if (rankScore_result < highest_metrics and onTimePercent_result >= opt.Train_onTimePercent_threshold):
+    if rankScore_result < highest_metrics:
         print("==> saving model")
         print("==> onTimePercent {} | rankScore {} ".format(onTimePercent_result, rankScore_result))
         highest_metrics = rankScore_result
