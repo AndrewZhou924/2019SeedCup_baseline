@@ -21,8 +21,10 @@
   ├── evaluation.py
   ├── model.py
   ├── README.md
+  ├── requirement.txt
   ├── test.py
   └── train.py
+  
   ```
 ### 运行环境
 
@@ -30,15 +32,18 @@
 - pytorch 1.1.0
 - numpy 1.17.2
 - tqdm 4.31.1
+- CUDA 10.1
+- cudnn 7.5
 
 ### 使用方法
 
-- 新建data文件夹，将初赛数据集csv文件放入
-
+- 配置运行环境，可使用pip或其他包管理工具进行安装
+  - 参考安装方式：`pip3 install -r requirement.txt`
+- 在工程根目录下新建data文件夹，将初赛数据集csv文件放入
 - 训练，模型保存在`model/` 中
-  - `python3 train.py`
+  - 执行`python3 train.py`
 - 测试，测试集预测结果保存在`test_output/` 中
-  - `python3 test.py`
+  - 执行`python3 test.py`
 
 ### 网络结构
 
