@@ -1,4 +1,4 @@
-# 2019 SeedCup baseline
+# [2019 SeedCup baseline](<https://github.com/AndrewZhou924/2019SeedCup_baseline>)
 
 ### 工程结构
 - `config.py` : 工程参数配置
