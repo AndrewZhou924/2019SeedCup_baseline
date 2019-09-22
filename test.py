@@ -10,7 +10,7 @@ from tqdm import tqdm
 import os
 
 '''
-在测试集上进行预测，输出指定格式的txt文件到test_output文件夹
+do inference on TestSet and output txt file
 '''
 def get_test_result():
     opt = Config()
@@ -50,7 +50,7 @@ def get_test_result():
             pred_time_day = output_FC_1_1[i]
             pred_time_hour = output_FC_1_2[i]
             temp_pred_signed_time = temp_payed_time + relativedelta(days = int(pred_time_day))
-            temp_pred_signed_time.replace(hour = int(pred_time_hour)%24)    
+            temp_pred_signed_time = temp_pred_signed_time.replace(hour = int(pred_time_hour)%24)    
 
             # temp_pred_signed_time = temp_payed_time + relativedelta(hours = pred_time_interval)
             pred_signed_time.append(temp_pred_signed_time.strftime('%Y-%m-%d %H'))
